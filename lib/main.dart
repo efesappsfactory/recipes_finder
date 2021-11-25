@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:recipes_finder/ui/main_screen.dart';
+import 'package:flutter/services.dart';
+
+import 'ui/main_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -7,7 +9,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({ Key? key }) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
