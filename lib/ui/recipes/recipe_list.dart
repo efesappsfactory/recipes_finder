@@ -10,6 +10,7 @@ import '../../network/recipe_model.dart';
 import 'package:flutter/services.dart';
 import '../recipe_card.dart';
 import 'recipe_details.dart';
+import '../../network/recipe_service.dart';
 
 class RecipeList extends StatefulWidget {
   const RecipeList({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class _RecipeListState extends State<RecipeList> {
   static const String prefSearchKey = "previousSearches";
   late TextEditingController searchTextController;
   final ScrollController _scrollController = ScrollController();
-  List currentSearchList = [];
+  List<APIHits> currentSearchList = [];
   int currentCount = 0;
   int currentStartPosition = 0;
   int currentEndPosition = 20;
