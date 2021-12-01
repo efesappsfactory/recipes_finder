@@ -221,6 +221,6 @@ Widget _buildRecipeCard(
         ),
       );
     },
-    child: recipeStringCard(recipe.image, recipe.label),
+    child: recipeCard(recipe),
   );
 }
