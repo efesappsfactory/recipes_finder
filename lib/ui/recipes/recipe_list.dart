@@ -60,11 +60,15 @@ class _RecipeListState extends State<RecipeList> {
     });
   }
 
+  Future<APIRecipeQuery> getRecipeData(String query, int from, int to) async {
+    final recipeJson = await RecipeService().getRecipes(query, from, to);
+    final recipeMap = json.decode(recipeJson);
+    return APIRecipeQuery.fromJson(recipeMap);
+  }
+
   Future loadRecipes() async {
-    // 1
     final jsonString = await rootBundle.loadString('assets/recipes1.json');
     setState(() {
-      // 2
       _currentRecipes1 = APIRecipeQuery.fromJson(jsonDecode(jsonString));
     });
   }
@@ -208,20 +212,38 @@ class _RecipeListState extends State<RecipeList> {
       child: _buildRecipeCard(context, _currentRecipes1!.hits, 0),
     );
   }
-}
 
-Widget _buildRecipeCard(
-    BuildContext topLevelContext, List<APIHits> hits, int index) {
-  final recipe = hits[index].recipe;
-  return GestureDetector(
-    onTap: () {
-      Navigator.push(
-        topLevelContext,
-        MaterialPageRoute(
-          builder: (context) => const RecipeDetails(),
+  Widget _buildRecipeList(BuildContext recipeListContext, List<APIHits> hits) {
+    final size = MediaQuery.of(context).size;
+    const itemHeight = 310;
+    final itemWidth = size.width / 2;
+    return Flexible(
+      child: GridView.builder(
+        controller: _scrollController,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: (itemWidth / itemHeight),
         ),
-      );
-    },
-    child: recipeCard(recipe),
-  );
+        itemCount: hits.length,
+        itemBuilder: (BuildContext context, int index) =>
+            _buildRecipeCard(recipeListContext, hits, index),
+      ),
+    );
+  }
+
+  Widget _buildRecipeCard(
+      BuildContext topLevelContext, List<APIHits> hits, int index) {
+    final recipe = hits[index].recipe;
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          topLevelContext,
+          MaterialPageRoute(
+            builder: (context) => const RecipeDetails(),
+          ),
+        );
+      },
+      child: recipeCard(recipe),
+    );
+  }
 }
