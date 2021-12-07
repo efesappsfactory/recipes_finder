@@ -16,7 +16,13 @@ class ModelConverter implements Converter {
     return encodeJson(req);
   }
 
-  Request encodeJson(Request request) {}
+  Request encodeJson(Request request) {
+    final contentType = request.headers[contentTypeKey];
+    if (contentType != null && contentType.contains(jsonHeaders)) {
+      return request.copyWith(body: json.encode(request.body));
+    }
+    return request;
+  }
 
   Response decodeJson<BodyType, InnerType>(Response response) {}
 
