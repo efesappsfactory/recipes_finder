@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'package:chopper/chopper.dart';
 import 'model_response.dart';
@@ -24,7 +23,27 @@ class ModelConverter implements Converter {
     return request;
   }
 
-  Response decodeJson<BodyType, InnerType>(Response response) {}
+  Response<BodyType> decodeJson<BodyType, InnerType>(Response response) {
+    final contentType = response.headers[contentTypeKey];
+    var body = response.body;
+    if (contentType != null && contentType.contains(jsonHeaders)) {
+      body = utf8.decode(response.bodyBytes);
+    }
+    try {
+      final mapData = json.decode(body);
+      if (mapData["status"] != null) {
+        return response.copyWith<BodyType>(
+            body: Error(Exception(mapData["status"])) as BodyType);
+      }
+      final recipeQuery = APIRecipeQuery.fromJson(mapData);
+      return response.copyWith<BodyType>(
+          body: Success(recipeQuery) as BodyType);
+    } catch (e) {
+      chopperLogger.warning(e);
+      return response.copyWith<BodyType>(
+          body: Error(e as Exception) as BodyType);
+    }
+  }
 
   @override
   Response<BodyType> convertResponse<BodyType, InnerType>(Response response) {}
