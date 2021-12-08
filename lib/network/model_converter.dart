@@ -46,5 +46,7 @@ class ModelConverter implements Converter {
   }
 
   @override
-  Response<BodyType> convertResponse<BodyType, InnerType>(Response response) {}
+  Response<BodyType> convertResponse<BodyType, InnerType>(Response response) {
+    return decodeJson<BodyType, InnerType>(response);
+  }
 }
