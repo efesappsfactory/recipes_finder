@@ -9,5 +9,10 @@ abstract class Repository {
   int insertRecipe(Recipe recipe);
   List<int> insertIngredients(List<Ingredient> ingredients);
 
+  void deleteRecipe(Recipe recipe);
+  void deleteIngredient(Ingredient ingredient);
+  void deleteIngredients(List<Ingredient> ingredients);
+  void deleteRecipeIngredients(int recipeId);
+
   
 }
