@@ -33,6 +33,25 @@ class MemoryRepository extends Repository with ChangeNotifier {
     return recipeIngredients;
   }
 
+    @override
+  int insertRecipe(Recipe recipe) {
+    _currentRecipes.add(recipe);
+    if (recipe.ingredients != null) {
+      insertIngredients(recipe.ingredients!);
+    }
+    notifyListeners();
+    return 0;
+  }
+
+  @override
+  List<int> insertIngredients(List<Ingredient> ingredients) {
+    if (ingredients.isNotEmpty) {
+      _currentIngredients.addAll(ingredients);
+      notifyListeners();
+    }
+    return <int>[];
+  }
+
   @override
   Future init() => Future.value(null);
 
