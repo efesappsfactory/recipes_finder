@@ -9,6 +9,31 @@ class MemoryRepository extends Repository with ChangeNotifier {
   final List<Ingredient> _currentIngredients = <Ingredient>[];
 
   @override
+  List<Recipe> findAllRecipes() {
+    return _currentRecipes;
+  }
+
+  @override
+  Recipe findRecipeById(int id) {
+    return _currentRecipes.firstWhere((recipe) => recipe.id == id);
+  }
+
+  @override
+  List<Ingredient> findAllIngredients() {
+    return _currentIngredients;
+  }
+
+  @override
+  List<Ingredient> findRecipeIngredients(int recipeId) {
+    final recipe =
+        _currentRecipes.firstWhere((recipe) => recipe.id == recipeId);
+    final recipeIngredients = _currentIngredients
+        .where((ingredient) => ingredient.recipeId == recipe.id)
+        .toList();
+    return recipeIngredients;
+  }
+
+  @override
   Future init() => Future.value(null);
 
   @override
