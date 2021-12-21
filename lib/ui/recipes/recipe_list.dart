@@ -13,6 +13,7 @@ import 'recipe_details.dart';
 import '../../network/recipe_model.dart';
 import '../../network/recipe_service.dart';
 import '../../network/model_response.dart';
+import '../../data/models/models.dart';
 
 class RecipeList extends StatefulWidget {
   const RecipeList({Key? key}) : super(key: key);
@@ -285,7 +286,18 @@ class _RecipeListState extends State<RecipeList> {
         Navigator.push(
           topLevelContext,
           MaterialPageRoute(
-            builder: (context) => const RecipeDetails(),
+            builder: (context) {
+              final detailRecipe = Recipe(
+                label: recipe.label,
+                image: recipe.image,
+                url: recipe.url,
+                calories: recipe.calories,
+                totalTime: recipe.totalTime,
+                totalWeight: recipe.totalWeight,
+              );
+              detailRecipe.ingredients = convertIngredients(recipe.ingredients);
+              return RecipeDetails(recipe: detailRecipe);
+            },
           ),
         );
       },
